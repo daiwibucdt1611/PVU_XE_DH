@@ -1,0 +1,65 @@
+#include <Arduino.h>
+#include "crsf.h"
+#include "project_config.h"
+
+void setup()
+{
+    // put your setup code here, to run once:
+    Serial2.begin(420000, SERIAL_8N1, RXD2, TXD2);
+    Serial2.setTimeout(0);
+    Serial.begin(115200);
+    Serial.println("Serial communication initialized.");
+}
+
+void loop()
+{
+    int serial2Available = Serial2.available();
+    static int vx_cmd, vy_cmd, vr_cmd;
+    static unsigned long last_servo_update_us = 0;
+    if (serial2Available > 0)
+    {
+        size_t bytesToRead = (size_t)min(serial2Available, SBUS_BUFFER_SIZE);
+        size_t numBytesRead = Serial2.readBytes(_rcs_buf, bytesToRead);
+        if (numBytesRead > 0)
+        {
+            crsf_parse(&_rcs_buf[0], numBytesRead, &_raw_rc_values[0], &_raw_rc_count, RC_INPUT_MAX_CHANNELS);
+            // channel 0: Roll (Strafe Left/Right)
+            // channel 1: Pitch (Forward/Backward)
+            // channel 2: Throttle
+            // channel 3: Yaw (Rotation)
+            // channel 8, channel 9, (servo)
+            Serial.print("Channel 0: ");
+            Serial.print(_raw_rc_values[0]);
+            Serial.print("\tChannel 1: ");
+            Serial.print(_raw_rc_values[1]);
+            Serial.print("\tChannel 2: ");
+            Serial.print(_raw_rc_values[2]);
+            Serial.print("\tChannel 3: ");
+            Serial.print(_raw_rc_values[3]);
+            Serial.print("\tChannel 4: ");
+            Serial.print(_raw_rc_values[4]);
+            Serial.print("\tChannel 5: ");
+            Serial.print(_raw_rc_values[5]);
+            Serial.print("\tChannel 6: ");
+            Serial.print(_raw_rc_values[6]);
+            Serial.print("\tChannel 7: ");
+            Serial.print(_raw_rc_values[7]);
+            Serial.print("\tChannel 8: ");
+            Serial.print(_raw_rc_values[8]);
+            Serial.print("\tChannel 9: ");
+            Serial.print(_raw_rc_values[9]);
+            Serial.print("\tChannel 10: ");
+            Serial.print(_raw_rc_values[10]);
+            Serial.print("\tChannel 11: ");
+            Serial.print(_raw_rc_values[11]);
+            Serial.print("\tChannel 12: ");
+            Serial.print(_raw_rc_values[12]);
+            Serial.print("\tChannel 13: ");
+            Serial.print(_raw_rc_values[13]);
+            Serial.print("\tChannel 14: ");
+            Serial.print(_raw_rc_values[14]);
+            Serial.print("\tChannel 15: ");
+            Serial.println(_raw_rc_values[15]);
+        }
+    }
+}
