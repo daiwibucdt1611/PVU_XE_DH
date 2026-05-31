@@ -48,7 +48,7 @@ void loop()
       // channel 3: Yaw (Rotation)
       // channel 8, channel 9, (servo)
       static bool servo_mid_pos_prev = false;
-      servo_mid_pos = update_servo_toggle((_raw_rc_values[9] > 1500 ? 1 : 0), servo_mid_pos_prev, servo_mid_pos, Servo_open - 100, Servo_close + 300);
+      servo_mid_pos = update_servo_toggle((_raw_rc_values[9] > 1500 ? 1 : 0), servo_mid_pos_prev, servo_mid_pos, Servo_open - 100, Servo_close + 320);
       static int speed;
       if (_raw_rc_values[10] < 1100 && _raw_rc_values[11] < 1100)
       {
